@@ -36,12 +36,12 @@ VALIDATE(){
 dnf module disable nginx -y &>>$LOG_FILE
 VALIDATE $? " disabling the nginx "
 dnf module enable nginx:1.24 -y &>>$LOG_FILE
-VALIDAT $? " enable the nginx 1.24"
+VALIDATE $? " enable the nginx 1.24"
 dnf install nginx -y &>>$LOG_FILE
 VALIDATE $? "installing the nginx"
 
-systemctl enable nginx 
-systemctl start nginx 
+systemctl enable nginx &>>$LOG_FILE
+systemctl start nginx &>>$LOG_FILE
 VALIDATE $? "starting the nginx"
 
 rm -rf /usr/share/nginx/html/* 
@@ -50,13 +50,13 @@ curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v
 VALIDATE $? "downloading the frontend"
 
 cd /usr/share/nginx/html  
-unzip /tmp/frontend.zip
+unzip /tmp/frontend.zip &>>$LOG_FILE
 VALIDATE $? " unzip frontend "
-rm -rf /etc/nginx/nginx.conf
+rm -rf /etc/nginx/nginx.conf &>>$LOG_FILE
 VALIDATE $? " removing nginx.conf "
 
- cp $SCRIPT_DICT/nginx.conf /etc/nginx/nginx.conf
+ cp $SCRIPT_DICT/nginx.conf /etc/nginx/nginx.conf &>>$LOG_FILE
  VALIDATE $? " copying nginx.conf "
 
- systemctl restart nginx 
+ systemctl restart nginx &>>$LOG_FILE
  VALIDATE $? " restarting nginx"
