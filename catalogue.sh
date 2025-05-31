@@ -31,20 +31,4 @@ VALIDATE(){
         exit 1
     fi
 }
-cp mongo.repo /etc/yum.repos.d/mongodb.repo
-VALIDATE $? "copying mongodb"
-
-dnf install mongodb-org -y &>>$LOG_FILE
-VALIDATE $? "installing mongodb server"
-
-systemctl enable mongod &>>$LOG_FILE
-VALIDATE $? "enabling mongodb"
-
-systemctl start mongod &>>$LOG_FILE
-VALIDATE $? "start mongodb"
-
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf 
-VALIDATE $?  "editing mongodb conf file for remote connections"
-
-systemctl restart mongod &>>$LOG_FILE
-VALIDATE $? "restart the services" 
+dnf module disable nodejs -y
