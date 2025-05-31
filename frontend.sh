@@ -59,4 +59,4 @@ VALIDATE $? " removing nginx.conf "
  VALIDATE $? " copying nginx.conf "
 
  systemctl restart nginx &>>$LOG_FILE
- VALIDATE $? " restarting nginx"
+ VALIDATE $? " restarting nginx" 
