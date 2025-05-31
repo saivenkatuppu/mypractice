@@ -34,22 +34,26 @@ VALIDATE(){
     fi
 }
 
-dnf module disable redis -y & >>$LOG_FILE
+dnf module disable redis -y &>>$LOG_FILE
 VALIDATE $? "disable the default redis"
 
-dnf module enable redis:7 -y & >>$LOG_FILE
+dnf module enable redis:7 -y &>>$LOG_FILE
 VALIDATE $? "enabling the redis"
 
-dnf install redis -y & >>$LOG_FILE
+dnf install redis -y &>>$LOG_FILE
 VALIDATE $? "installing the redis"
-sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf & >>$LOG_FILE
+
+sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf 
 VALIDATE $? "edition changes"
 
 
-systemctl enable redis & >>$LOG_FILE
-systemctl start redis & >>$LOG_FILE
+systemctl enable redis &>>$LOG_FILE
+VALIDATE $? "enable redis"
+systemctl start redis &>>$LOG_FILE
 VALIDATE $? "stated redis"
+
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
+
 echo -e " execetion completed succesfully ,$Y time taken : $TOTAL_TIME $N "| tee -a $LOG_FILE
 
